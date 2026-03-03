@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Models\Post;
+namespace App\Http\Controllers;
 
 use App\Models\Post;
 use Illuminate\Http\Request;
 
-class PostController extends Controllers
+class PostController extends Controller
 {
     public function index()
     {
         $posts = Post::latest()->get();
-        return view('posts.index', compact('posts'));
+        return view('posts.index', ['posts' => $posts]);
     }
 
     public function create()
@@ -22,11 +22,12 @@ class PostController extends Controllers
     {
         $request->validate([
             'title' => 'required',
-            'content' => 'required'
+            'content' => 'required',
         ]);
 
         Post::create($request->all());
-        return redirect()-> route('post.index');
+
+        return redirect()->route('posts.index');
     }
 
     public function edit(Post $post)
@@ -38,16 +39,18 @@ class PostController extends Controllers
     {
         $request->validate([
             'title' => 'required',
-            'content' => 'required'
+            'content' => 'required',
         ]);
 
         $post->update($request->all());
-        return redirect()->route('post.index');
+
+        return redirect()->route('posts.index');
     }
 
     public function destroy(Post $post)
     {
         $post->delete();
-        return redirect()->route('post.index');
+
+        return redirect()->route('posts.index');
     }
 }
